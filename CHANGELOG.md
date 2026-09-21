@@ -2,6 +2,19 @@
 
 이 저장소의 개발 계획서 변경 사항을 [Semantic Versioning](https://semver.org/) 형식으로 관리한다.
 
+## [1.2.0] - 2026-09-21
+
+### Added
+
+- 공식 Gencow backend-only 프로젝트 골격
+- 독도 사료·현지화·인용 fragment·미디어·전사·역사사건 Drizzle 스키마
+- MCP `2026-07-28` `server/discover`와 레거시 `initialize` 이중 호환 프로토콜 처리
+- `/mcp`, `/api/health` Gencow HTTP routes
+- `search_sources`, `get_source`, `search_media`, `get_timeline` 읽기 전용 도구
+- `dokdo://sources/{sourceId}` resource와 두 개의 연구 prompt
+- 영어 기본, 한국어·일본어 선택 및 결정적 언어 fallback 구현
+- MCP 프로토콜 단위 테스트와 로컬 실행 README
+
 ## [1.1.0] - 2026-09-21
 
 ### Added

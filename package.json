@@ -1,0 +1,30 @@
+{
+  "name": "dokdo-mcp",
+  "version": "1.2.0",
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "dependencies": {
+    "gencow": "latest",
+    "@gencow/core": "latest",
+    "@electric-sql/pglite": "^0.4.5",
+    "better-auth": "^1.6.9",
+    "drizzle-orm": "^1.0.0-rc.4 || ^1.0.0",
+    "drizzle-kit": "^1.0.0-rc.4 || ^1.0.0",
+    "hono": "^4.12.18",
+    "postgres": "^3.4.9"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "codegen": "gencow codegen",
+    "dev": "gencow dev",
+    "dev:local": "gencow dev --local",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.json",
+    "db:push": "gencow db:push",
+    "db:generate": "gencow db:generate"
+  }
+}
