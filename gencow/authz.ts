@@ -1,9 +1,15 @@
 import type { GencowAppCtx } from "@gencow/core";
 
-export const DASHBOARD_ADMIN_EMAILS = ["jaypark8780@gmail.com"] as const;
+/** Comma-separated administrator emails are supplied by the deployment environment. */
+export function dashboardAdminEmails(): string[] {
+  return (process.env.DOKDO_ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+}
 
 export function isDashboardAdminEmail(email: string) {
-  return (DASHBOARD_ADMIN_EMAILS as readonly string[]).includes(email.trim().toLowerCase());
+  return dashboardAdminEmails().includes(email.trim().toLowerCase());
 }
 
 export function requireDashboardAdmin(ctx: Pick<GencowAppCtx, "auth">) {

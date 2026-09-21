@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { requireDashboardAdmin } from "../gencow/authz";
 
+process.env.DOKDO_ADMIN_EMAILS = "jaypark8780@gmail.com";
+
 describe("dashboard authorization", () => {
   test("allows the configured administrator email case-insensitively", () => {
     const identity = requireDashboardAdmin({ auth: { requireAuth: () => ({ id: "1", email: "JAYPARK8780@GMAIL.COM" }) } } as any);
