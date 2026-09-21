@@ -27,7 +27,7 @@ import "./runtime";
 
 import { defineApi } from "@gencow/core";
 import { healthRoute, mcpDeleteRoute, mcpGetRoute, mcpPostRoute } from "./mcp/routes";
-import { dashboardPageRoute, dashboardSummaryRoute } from "./dashboard/routes";
+import { dashboardPageRoute, dashboardSummaryRoute, loginPageRoute } from "./dashboard/routes";
 import { getDashboardSummary } from "./dashboard/procedures";
 
 export default defineApi({
@@ -41,5 +41,6 @@ export default defineApi({
     mcpDelete: mcpDeleteRoute,
     dashboard: dashboardPageRoute,
     dashboardSummary: dashboardSummaryRoute,
+    login: loginPageRoute,
   },
 });
