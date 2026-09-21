@@ -1,11 +1,13 @@
 import { count, eq } from "drizzle-orm";
 import { procedure } from "../runtime";
 import { ingestJobs, rightsReviews, sourceRegistry, sources } from "../schema";
+import { requireDashboardAdmin } from "../authz";
 
 /** Authenticated dashboard query; mutations remain intentionally absent. */
 export const getDashboardSummary = procedure.query
   .name("dashboard.summary")
   .handler(async ({ context: ctx }) => {
+    requireDashboardAdmin(ctx);
     const [[sourceTotal], [published], [rightsPending], [ingestPending], [registryEnabled]] = await Promise.all([
       ctx.db.select({ value: count() }).from(sources),
       ctx.db.select({ value: count() }).from(sources).where(eq(sources.verificationStatus, "published")),

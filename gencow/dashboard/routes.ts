@@ -1,6 +1,7 @@
 import { count, eq } from "drizzle-orm";
 import { httpRoute } from "../runtime";
 import { claimEvidence, claimLocalizations, claims, ingestJobs, rightsReviews, sourceRegistry, sources } from "../schema";
+import { requireDashboardAdmin } from "../authz";
 
 const DASHBOARD_HTML = String.raw`<!doctype html>
 <html lang="en">
@@ -20,14 +21,18 @@ fetch('/api/dashboard/summary',{credentials:'same-origin'}).then(r=>{if(!r.ok)th
 
 export const dashboardPageRoute = httpRoute.get
   .path("/dashboard")
-  .handler(async () => ({
+  .handler(async ({ context: ctx }) => {
+    requireDashboardAdmin(ctx);
+    return {
     headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
     body: DASHBOARD_HTML,
-  }));
+    };
+  });
 
 export const dashboardSummaryRoute = httpRoute.get
   .path("/api/dashboard/summary")
   .handler(async ({ context: ctx }) => {
+    requireDashboardAdmin(ctx);
     const [[sourceTotal], [published], [claimPending], [rightsPending], [ingestPending], [ingestActive], [registryEnabled]] = await Promise.all([
       ctx.db.select({ value: count() }).from(sources),
       ctx.db.select({ value: count() }).from(sources).where(eq(sources.verificationStatus, "published")),
