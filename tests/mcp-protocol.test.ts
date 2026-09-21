@@ -61,6 +61,35 @@ describe("Dokdo MCP protocol", () => {
     expect((response.body as any).result.serverInfo.name).toBe("dokdo-mcp");
   });
 
+  test("exposes tools, resources, and prompts through MCP discovery methods", async () => {
+    const tools = await handle({ jsonrpc: "2.0", id: 10, method: "tools/list", params: { _meta: modernMeta } });
+    const resources = await handle({ jsonrpc: "2.0", id: 11, method: "resources/list", params: { _meta: modernMeta } });
+    const prompts = await handle({ jsonrpc: "2.0", id: 12, method: "prompts/list", params: { _meta: modernMeta } });
+
+    expect((tools.body as any).result.tools.map((tool: any) => tool.name)).toEqual([
+      "search_sources",
+      "get_source",
+      "search_media",
+      "get_timeline",
+    ]);
+    expect(Array.isArray((resources.body as any).result.resources)).toBe(true);
+    expect((prompts.body as any).result.prompts.map((prompt: any) => prompt.name)).toEqual([
+      "build_cited_timeline",
+      "compare_perspectives",
+    ]);
+  });
+
+  test("reads a published source resource", async () => {
+    const response = await handle({
+      jsonrpc: "2.0",
+      id: 13,
+      method: "resources/read",
+      params: { _meta: modernMeta, uri: "dokdo://sources/source-1?language=ko" },
+    });
+    expect((response.body as any).result.contents[0].uri).toBe("dokdo://sources/source-1?language=ko");
+    expect(JSON.parse((response.body as any).result.contents[0].text).requestedLanguage).toBe("ko");
+  });
+
   test("uses English by default and accepts Korean", async () => {
     const english = await handle({
       jsonrpc: "2.0",
