@@ -2,6 +2,13 @@
 
 이 저장소의 개발 계획서 변경 사항을 [Semantic Versioning](https://semver.org/) 형식으로 관리한다.
 
+## [Unreleased]
+
+### Added
+
+- 기관별 역사자료 수집, 권리 판정, OCR·번역·전사, 검수와 공개 절차를 정의한 수집 계획서
+- 국가기록원, JACAR, NARA, TNA를 시작점으로 하는 6주 파일럿 일정
+
 ## [1.2.0] - 2026-09-21
 
 ### Added
