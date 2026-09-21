@@ -11,6 +11,7 @@
 - 공식 영유권 주장과 검수된 반박·지지·맥락 사료를 연결하는 claim/evidence 모델
 - 반박 사료가 없는 필수반박 주장의 공개를 차단하는 publication policy
 - 관리자 수집 기반으로 source registry allowlist, item-level rights review, retry-safe ingest job 상태와 HTTPS 도메인 검증 추가
+- 인증된 `/dashboard` 검토 화면과 `/api/dashboard/summary` 요약 API 추가
 
 ## [1.2.0] - 2026-09-21
 

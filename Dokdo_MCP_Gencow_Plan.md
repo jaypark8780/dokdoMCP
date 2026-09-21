@@ -126,6 +126,7 @@ Admin reviewer
 ### 읽기와 쓰기 경계
 
 - MCP v1은 공개된 자료의 **읽기 전용** 도구만 제공한다.
+- 관리자 검토는 인증된 `/dashboard`와 `/api/dashboard/summary`에서 수행하며, MCP 공개 라우트와 분리한다.
 - 수집, 수정, 공개, 삭제는 MCP에서 노출하지 않고 인증된 관리자 procedure와 workflow에서만 수행한다.
 - 공개 MCP 라우트는 `.allowAnonymous()`를 사용하되, 자체 API 키·레이트 제한·남용 방지 미들웨어를 적용한다.
 - 베타 단계는 API 키, 공개 단계는 익명 읽기 + 보수적 레이트 제한을 권장한다.
