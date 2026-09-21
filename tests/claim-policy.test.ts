@@ -24,6 +24,10 @@ describe("claim publication policy", () => {
     ).toThrow("exact counter-evidence fragment");
   });
 
+  test("requires counter-evidence for every refuted assessment", () => {
+    expect(() => validateClaimPublication({ assessmentStatus: "refuted", requiresCounterEvidence: false, evidence: [] })).toThrow("cannot be published");
+  });
+
   test("allows a reviewed rebuttal with a locator", () => {
     expect(() =>
       validateClaimPublication({

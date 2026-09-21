@@ -16,7 +16,7 @@ export type ClaimForPublication = {
  * the editorial record says that counter-evidence is required.
  */
 export function validateClaimPublication(claim: ClaimForPublication): void {
-  if (!claim.requiresCounterEvidence) return;
+  if (!claim.requiresCounterEvidence && claim.assessmentStatus !== "refuted") return;
 
   const reviewedCounterEvidence = claim.evidence.filter(
     (item) => item.relationship === "contradicts" && item.reviewStatus === "published",
