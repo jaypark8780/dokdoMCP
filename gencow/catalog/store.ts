@@ -7,6 +7,7 @@ import {
   sourceEventLinks,
   sourceFragments,
   sourceLocalizations,
+  sourceLinks,
   sources,
 } from "../schema";
 import { parseLanguage, resolveLocalization, type Language } from "../i18n/language";
@@ -182,6 +183,7 @@ export function createCatalogStore(db: DbClient): CatalogStore {
       }
 
       const media = await db.select().from(mediaAssets).where(eq(mediaAssets.sourceId, source.id));
+      const links = await db.select().from(sourceLinks).where(eq(sourceLinks.sourceId, source.id));
       const claimContexts = await getClaimContextsForSource(db, source.id, language);
       return {
         sourceId: source.id,
@@ -228,6 +230,15 @@ export function createCatalogStore(db: DbClient): CatalogStore {
           rightsStatus: asset.rightsStatus,
           creditLine: asset.creditLine,
           publicDeliveryMode: asset.publicDeliveryMode,
+        })),
+        links: links.map((link: any) => ({
+          url: link.url,
+          urlType: link.urlType,
+          checkedAt: link.checkedAt,
+          httpStatus: link.httpStatus,
+          contentType: link.contentType,
+          checksum: link.checksum,
+          isCurrent: link.isCurrent,
         })),
       };
     },

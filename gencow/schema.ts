@@ -78,6 +78,23 @@ export const sourceLocalizations = pgTable(
   ],
 );
 
+/** Lightweight provenance links; source files are intentionally not copied into this database. */
+export const sourceLinks = pgTable(
+  "source_links",
+  {
+    id: text("id").primaryKey(),
+    sourceId: text("source_id").notNull().references(() => sources.id, { onDelete: "cascade" }),
+    url: text("url").notNull(),
+    urlType: text("url_type").default("canonical").notNull(),
+    checkedAt: timestamp("checked_at", { withTimezone: true }),
+    httpStatus: integer("http_status"),
+    contentType: text("content_type"),
+    checksum: text("checksum"),
+    isCurrent: boolean("is_current").default(true).notNull(),
+  },
+  (table) => [index("source_links_source_idx").on(table.sourceId), index("source_links_current_idx").on(table.isCurrent)],
+);
+
 export const sourceFragments = pgTable(
   "source_fragments",
   {
