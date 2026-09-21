@@ -12,6 +12,7 @@ An English-first, multilingual Model Context Protocol server for curated histori
 - Resources: `dokdo://sources/{sourceId}`
 - Prompts: `build_cited_timeline`, `compare_perspectives`
 - Deterministic language fallback: requested language → English → original
+- Reviewed institutional claims are returned with linked rebuttal, supporting and contextual evidence; claims requiring counter-evidence cannot be published alone
 
 The MCP surface is read-only. It only returns records whose `verification_status` is `published`. Ingestion and review workflows are intentionally not exposed to MCP clients.
 

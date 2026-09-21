@@ -10,12 +10,16 @@ import * as m1 from "../schema";
 
 const schema = {
   "account": m0.account,
+  "claimEvidence": m1.claimEvidence,
+  "claimLocalizations": m1.claimLocalizations,
+  "claims": m1.claims,
   "eventLocalizations": m1.eventLocalizations,
   "events": m1.events,
   "fragmentLocalizations": m1.fragmentLocalizations,
   "mediaAssets": m1.mediaAssets,
   "rateLimit": m0.rateLimit,
   "session": m0.session,
+  "sourceClaims": m1.sourceClaims,
   "sourceEventLinks": m1.sourceEventLinks,
   "sourceFragments": m1.sourceFragments,
   "sourceLocalizations": m1.sourceLocalizations,

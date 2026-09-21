@@ -10,6 +10,7 @@ import {
   sources,
 } from "../schema";
 import { parseLanguage, resolveLocalization, type Language } from "../i18n/language";
+import { getClaimContextsForSource } from "../claims/context";
 import {
   CatalogNotFoundError,
   type CatalogStore,
@@ -101,7 +102,7 @@ export function createCatalogStore(db: DbClient): CatalogStore {
 
       const page = [...grouped.values()].slice(offset, offset + limit + 1);
       const hasMore = page.length > limit;
-      const items = page.slice(0, limit).map(({ source, localizations }) => {
+      const items = await Promise.all(page.slice(0, limit).map(async ({ source, localizations }) => {
         const resolved = resolveLocalization(localizations, language, source.originalLanguage);
         return {
           sourceId: source.id,
@@ -123,8 +124,9 @@ export function createCatalogStore(db: DbClient): CatalogStore {
           fallbackReason: resolved.fallbackReason,
           availableLanguages: resolved.availableLanguages,
           originalLanguage: source.originalLanguage,
+          claimContexts: await getClaimContextsForSource(db, source.id, language),
         };
-      });
+      }));
 
       return {
         items,
@@ -180,6 +182,7 @@ export function createCatalogStore(db: DbClient): CatalogStore {
       }
 
       const media = await db.select().from(mediaAssets).where(eq(mediaAssets.sourceId, source.id));
+      const claimContexts = await getClaimContextsForSource(db, source.id, language);
       return {
         sourceId: source.id,
         title: resolved.value?.title ?? source.titleOriginal,
@@ -212,6 +215,7 @@ export function createCatalogStore(db: DbClient): CatalogStore {
         availableLanguages: resolved.availableLanguages,
         originalLanguage: source.originalLanguage,
         fragments,
+        claimContexts,
         media: media.map((asset: any) => ({
           mediaId: asset.id,
           kind: asset.kind,

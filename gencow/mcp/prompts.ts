@@ -49,7 +49,7 @@ export function getPrompt(name: string, args: Record<string, string> = {}) {
           role: "user",
           content: {
             type: "text",
-            text: `Compare source perspectives about ${topic} in language=${language}. Group Korean, Japanese, and third-country records separately. Distinguish primary sources from later interpretation, preserve uncertainty, and cite every material claim with source IDs and locators.`,
+            text: `Compare source perspectives about ${topic} in language=${language}. Group Korean, Japanese, and third-country records separately. For a reviewed claim marked refuted or contested, display its linked rebuttal evidence immediately after the claim. Distinguish primary sources from later interpretation, preserve uncertainty, and cite every material claim with source IDs and locators.`,
           },
         },
       ],

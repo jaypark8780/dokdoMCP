@@ -20,7 +20,7 @@ export const TOOL_DEFINITIONS: McpToolDefinition[] = [
   {
     name: "search_sources",
     title: "Search Dokdo Sources",
-    description: "Search published Dokdo historical sources with provenance, rights and deterministic language fallback.",
+    description: "Search published Dokdo historical sources with provenance, rights and deterministic language fallback. Reviewed institutional claims include linked rebuttal evidence.",
     inputSchema: {
       type: "object",
       additionalProperties: false,
@@ -40,7 +40,7 @@ export const TOOL_DEFINITIONS: McpToolDefinition[] = [
   {
     name: "get_source",
     title: "Get a Dokdo Source",
-    description: "Read one published source, its exact citation fragments and linked media.",
+    description: "Read one published source, exact citation fragments, linked media, and reviewed rebuttal evidence for institutional claims.",
     inputSchema: {
       type: "object",
       additionalProperties: false,

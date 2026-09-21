@@ -7,6 +7,8 @@ export type LocalizedRecord = {
   title?: string | null;
   abstract?: string | null;
   description?: string | null;
+  statement?: string | null;
+  assessmentSummary?: string | null;
   content?: string | null;
   text?: string | null;
   reviewStatus?: string | null;

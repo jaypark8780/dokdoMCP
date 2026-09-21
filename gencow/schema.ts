@@ -219,6 +219,88 @@ export const sourceEventLinks = pgTable(
   (table) => [primaryKey({ columns: [table.sourceId, table.eventId] })],
 );
 
+/**
+ * Claims are kept separate from evidence. Country or institution alone never
+ * determines an assessment; reviewed source fragments do.
+ */
+export const claims = pgTable(
+  "claims",
+  {
+    id: text("id").primaryKey(),
+    topic: text("topic").notNull(),
+    claimantCountry: text("claimant_country"),
+    claimantInstitution: text("claimant_institution"),
+    claimType: text("claim_type").default("official_position").notNull(),
+    assessmentStatus: text("assessment_status").default("contested").notNull(),
+    requiresCounterEvidence: boolean("requires_counter_evidence").default(true).notNull(),
+    reviewStatus: text("review_status").default("draft").notNull(),
+    reviewedBy: text("reviewed_by"),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("claims_topic_idx").on(table.topic),
+    index("claims_claimant_country_idx").on(table.claimantCountry),
+    index("claims_review_status_idx").on(table.reviewStatus),
+  ],
+);
+
+export const claimLocalizations = pgTable(
+  "claim_localizations",
+  {
+    claimId: text("claim_id")
+      .notNull()
+      .references(() => claims.id, { onDelete: "cascade" }),
+    language: text("language").notNull(),
+    statement: text("statement").notNull(),
+    assessmentSummary: text("assessment_summary").notNull(),
+    translationMethod: text("translation_method").default("human").notNull(),
+    reviewStatus: text("review_status").default("draft").notNull(),
+    version: integer("version").default(1).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.claimId, table.language, table.version] })],
+);
+
+export const sourceClaims = pgTable(
+  "source_claims",
+  {
+    sourceId: text("source_id")
+      .notNull()
+      .references(() => sources.id, { onDelete: "cascade" }),
+    claimId: text("claim_id")
+      .notNull()
+      .references(() => claims.id, { onDelete: "cascade" }),
+    relationship: text("relationship").default("asserts").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.sourceId, table.claimId] })],
+);
+
+export const claimEvidence = pgTable(
+  "claim_evidence",
+  {
+    id: text("id").primaryKey(),
+    claimId: text("claim_id")
+      .notNull()
+      .references(() => claims.id, { onDelete: "cascade" }),
+    sourceId: text("source_id")
+      .notNull()
+      .references(() => sources.id, { onDelete: "cascade" }),
+    fragmentId: text("fragment_id").references(() => sourceFragments.id, { onDelete: "set null" }),
+    relationship: text("relationship").notNull(),
+    relevanceNote: text("relevance_note"),
+    reviewStatus: text("review_status").default("draft").notNull(),
+    reviewedBy: text("reviewed_by"),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("claim_evidence_unique").on(table.claimId, table.sourceId, table.fragmentId, table.relationship),
+    index("claim_evidence_claim_idx").on(table.claimId),
+  ],
+);
+
 export const relations = defineRelations({ user, session, account, verification, rateLimit }, (r) => ({
   ...authRelationsConfig(r),
 }));
