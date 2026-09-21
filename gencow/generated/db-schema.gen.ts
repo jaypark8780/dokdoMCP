@@ -24,6 +24,7 @@ const schema = {
   "sourceClaims": m1.sourceClaims,
   "sourceEventLinks": m1.sourceEventLinks,
   "sourceFragments": m1.sourceFragments,
+  "sourceLinks": m1.sourceLinks,
   "sourceLocalizations": m1.sourceLocalizations,
   "sourceRegistry": m1.sourceRegistry,
   "sources": m1.sources,
