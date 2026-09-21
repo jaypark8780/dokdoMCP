@@ -10,7 +10,7 @@ export const SUPPORTED_PROTOCOL_VERSIONS = [
   "2025-03-26",
 ] as const;
 
-const SERVER_INFO = { name: "dokdo-mcp", title: "Dokdo Historical Sources", version: "1.2.0" };
+const SERVER_INFO = { name: "dokdo-mcp", title: "Dokdo Historical Sources", version: "1.3.0" };
 const CAPABILITIES = { tools: {}, resources: {}, prompts: {} };
 
 type JsonRpcId = string | number | null;

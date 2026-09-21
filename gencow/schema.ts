@@ -219,6 +219,68 @@ export const sourceEventLinks = pgTable(
   (table) => [primaryKey({ columns: [table.sourceId, table.eventId] })],
 );
 
+/** Approved institutional endpoints and collection constraints. */
+export const sourceRegistry = pgTable(
+  "source_registry",
+  {
+    id: text("id").primaryKey(),
+    institution: text("institution").notNull(),
+    country: text("country").notNull(),
+    baseUrl: text("base_url").notNull(),
+    discoveryMethod: text("discovery_method").notNull(),
+    allowedDomains: jsonb("allowed_domains").$type<string[]>().notNull(),
+    apiDailyLimit: integer("api_daily_limit"),
+    metadataReuse: text("metadata_reuse").default("unknown").notNull(),
+    fileReuseDefault: text("file_reuse_default").default("unknown").notNull(),
+    requiresItemRightsReview: boolean("requires_item_rights_review").default(true).notNull(),
+    robotsReviewedAt: text("robots_reviewed_at"),
+    termsReviewedAt: text("terms_reviewed_at"),
+    enabled: boolean("enabled").default(false).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index("source_registry_enabled_idx").on(table.enabled), uniqueIndex("source_registry_base_url_unique").on(table.baseUrl)],
+);
+
+/** Idempotent discovery and processing state for administrator workflows. */
+export const ingestJobs = pgTable(
+  "ingest_jobs",
+  {
+    id: text("id").primaryKey(),
+    registryId: text("registry_id").notNull().references(() => sourceRegistry.id, { onDelete: "restrict" }),
+    status: text("status").default("discovered").notNull(),
+    requestUrl: text("request_url").notNull(),
+    externalIdentifier: text("external_identifier"),
+    responseHash: text("response_hash"),
+    sourceId: text("source_id").references(() => sources.id, { onDelete: "set null" }),
+    errorCode: text("error_code"),
+    errorMessage: text("error_message"),
+    attemptCount: integer("attempt_count").default(0).notNull(),
+    discoveredAt: timestamp("discovered_at", { withTimezone: true }).defaultNow().notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+  },
+  (table) => [index("ingest_jobs_registry_idx").on(table.registryId), index("ingest_jobs_status_idx").on(table.status), uniqueIndex("ingest_jobs_registry_external_unique").on(table.registryId, table.externalIdentifier)],
+);
+
+/** Item-level rights evidence; a registry default is never sufficient by itself. */
+export const rightsReviews = pgTable(
+  "rights_reviews",
+  {
+    id: text("id").primaryKey(),
+    sourceId: text("source_id").notNull().references(() => sources.id, { onDelete: "cascade" }),
+    status: text("status").default("pending").notNull(),
+    rightsStatus: text("rights_status").default("unknown").notNull(),
+    policyUrl: text("policy_url"),
+    evidenceExcerpt: text("evidence_excerpt"),
+    reviewer: text("reviewer"),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+    allowedUses: jsonb("allowed_uses").$type<string[]>(),
+    attributionText: text("attribution_text"),
+    notes: text("notes"),
+  },
+  (table) => [index("rights_reviews_source_idx").on(table.sourceId), index("rights_reviews_status_idx").on(table.status)],
+);
+
 /**
  * Claims are kept separate from evidence. Country or institution alone never
  * determines an assessment; reviewed source fragments do.

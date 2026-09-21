@@ -13,6 +13,7 @@ An English-first, multilingual Model Context Protocol server for curated histori
 - Prompts: `build_cited_timeline`, `compare_perspectives`
 - Deterministic language fallback: requested language → English → original
 - Reviewed institutional claims are returned with linked rebuttal, supporting and contextual evidence; claims requiring counter-evidence cannot be published alone
+- Administrator ingestion foundation includes source-registry allowlists, item-level rights reviews, and retry-safe ingest-job state; no ingestion mutation is exposed through public MCP
 
 The MCP surface is read-only. It only returns records whose `verification_status` is `published`. Ingestion and review workflows are intentionally not exposed to MCP clients.
 

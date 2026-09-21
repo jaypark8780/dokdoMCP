@@ -10,7 +10,7 @@ export const healthRoute = httpRoute.get
     body: {
       status: "ok",
       service: "dokdo-mcp",
-      version: "1.2.0",
+      version: "1.3.0",
       defaultLanguage: "en",
       supportedLanguages: ["en", "ko", "ja"],
       supportedProtocolVersions: [...SUPPORTED_PROTOCOL_VERSIONS],
