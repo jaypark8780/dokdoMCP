@@ -19,6 +19,6 @@ export default {
     // Legacy escape hatch for advanced local integrations:
     // trustedOrigins: ["http://localhost:*"],
     deploy: {
-        app: "calm-surf-7680",
+        app: "blue-seal-5093",
     },
 };
