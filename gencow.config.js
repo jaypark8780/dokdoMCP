@@ -18,4 +18,7 @@ export default {
     // frontendOrigins: ["https://my-app.vercel.app"],
     // Legacy escape hatch for advanced local integrations:
     // trustedOrigins: ["http://localhost:*"],
+    deploy: {
+        app: "calm-surf-7680",
+    },
 };
